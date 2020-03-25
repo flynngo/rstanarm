@@ -299,3 +299,11 @@ test_that(".weighted works", {
   expect_equal(f(8, 0.25), 2)
   expect_error(f(2), "missing, with no default")
 })
+
+test_that("loo works for model.matrix with empty interactions", {
+  d <- data.frame(y = factor(sample(1:2, 6, TRUE)),
+                  x = factor(c(1, 1, 2, 2, 3, 3)),
+                  z = factor(c(1, 2, 1, 2, 1, 1)))
+  fit <- stan_glm(y ~ x*z, data = d, family = "binomial")
+  expect_error(loo(fit, save_psis = TRUE), NA)
+})

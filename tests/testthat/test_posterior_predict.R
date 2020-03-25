@@ -243,3 +243,21 @@ test_that("pp_binomial_trials works", {
   # expect_equal(ppbt(fit, newdata = mtcars[1:5, ]), rep(1, 5))
 })
 
+test_that("drop_empty_levels works", {
+  d <- data.frame(y = rnorm(6),
+                  x = factor(c(1, 1, 2, 2, 3, 3)),
+                  z = factor(c(1, 2, 1, 2, 1, 1)))
+  mm <- model.matrix(y~x*z, data=d) # x3:z2 only contains zeroes
+  expect_true(
+    any(apply(mm, 2, sum) == 0) &
+      !any(apply(drop_empty_levels(mm), 2, sum) == 0))
+})
+
+test_that("posterior_predict works for model.matrix with empty interactions", {
+  d <- data.frame(y = factor(sample(1:2, 6, TRUE)),
+                  x = factor(c(1, 1, 2, 2, 3, 3)),
+                  z = factor(c(1, 2, 1, 2, 1, 1)))
+  fit <- stan_glm(y ~ x*z, data = d, family = "binomial")
+  expect_error(posterior_predict(fit, draws = 1), NA)
+})
+

@@ -420,8 +420,8 @@ model.frame.stanreg <- function(formula, fixed.only = FALSE, ...) {
 model.matrix.stanreg <- function(object, ...) {
   if (inherits(object, "gamm4")) return(object$jam$X)
   if (is.mer(object)) return(object$glmod$X)
-    
-  NextMethod("model.matrix")
+  return(drop_empty_levels(model.matrix.default(object)))
+  # NextMethod("model.matrix")
 }
 
 #' formula method for stanreg objects
