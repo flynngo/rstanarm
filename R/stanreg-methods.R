@@ -420,6 +420,8 @@ model.frame.stanreg <- function(formula, fixed.only = FALSE, ...) {
 model.matrix.stanreg <- function(object, ...) {
   if (inherits(object, "gamm4")) return(object$jam$X)
   if (is.mer(object)) return(object$glmod$X)
+  # Hacky and will cause problems dropping levels from newdata that exist in
+  # data used to fit model.
   return(drop_empty_levels(model.matrix.default(object)))
   # NextMethod("model.matrix")
 }

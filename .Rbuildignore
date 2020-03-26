@@ -20,5 +20,3 @@ configure.ac
 ^inst/doc/\.install_extras$
 dev-notes/*
 revdep/*
-
-^delete_after$
